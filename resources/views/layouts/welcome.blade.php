@@ -7,12 +7,11 @@
 
     <title>{{ config('app.name', 'Voting Platform') }}</title>
 
-     Scripts 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="font-sans antialiased bg-gray-50">
     <div class="min-h-screen">
-         Navigation 
+
         <nav class="bg-white shadow-sm border-b border-gray-200">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex justify-between h-16">
@@ -46,7 +45,6 @@
             </div>
         </nav>
 
-         Page Content 
         <main class="py-6">
             @yield('content')
         </main>

@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.welcome')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -8,7 +8,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-         System Overview 
+         System Overview
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">System Overview</h3>
             <div class="space-y-2">
@@ -27,7 +27,7 @@
             </div>
         </div>
 
-         Quick Actions 
+         Quick Actions
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div class="space-y-3">
@@ -43,7 +43,7 @@
             </div>
         </div>
 
-         Recent Activity 
+         Recent Activity
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
             <p class="text-gray-500 text-sm">No recent activity</p>

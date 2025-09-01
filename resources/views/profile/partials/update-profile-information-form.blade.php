@@ -24,6 +24,18 @@
         </div>
 
         <div>
+            <x-input-label for="role" :value="__('Role')" />
+            <select id="role" name="role" class="mt-1 block w-full" required autocomplete="role">
+            <option value="super_admin" {{ old('role', $user->role) === 'super_admin' ? 'selected' : '' }}>{{ __('super_admin') }}</option>
+            <option value="admin" {{ old('role', $user->role) === 'admin' ? 'selected' : '' }}>{{ __('admin') }}</option>
+            <option value="committee" {{ old('role', $user->role) === 'committee' ? 'selected' : '' }}>{{ __('committee') }}</option>
+            <option value="voter" {{ old('role', $user->role) === 'voter' ? 'selected' : '' }}>{{ __('voter') }}</option>
+            </select>
+            <x-input-error class="mt-2" :messages="$errors->get('role')" />
+        </div>
+
+
+        <div>
             <x-input-label for="email" :value="__('Email')" />
             <x-text-input id="email" name="email" type="email" class="mt-1 block w-full" :value="old('email', $user->email)" required autocomplete="username" />
             <x-input-error class="mt-2" :messages="$errors->get('email')" />
