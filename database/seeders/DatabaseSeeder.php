@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,11 +12,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            OrganizationSeeder::class,
+            FeatureFlagSeeder::class,
+            SettingsSeeder::class,
         ]);
+
+        // Create default super admin if none exists
+        if (!User::where('role', 'super_admin')->exists()) {
+            User::factory()->create([
+                'name' => 'Super Admin',
+                'email' => 'admin@voting.local',
+                'role' => 'super_admin',
+                'email_verified_at' => now(),
+            ]);
+
+            $this->command->info('Default super admin created: admin@voting.local');
+        }
     }
 }
