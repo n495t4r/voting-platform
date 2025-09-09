@@ -26,7 +26,7 @@ class VotingController extends Controller
         try {
             // Validate token
             $dto = $this->tokenService->validate($token);
-            
+
             // Check if election is open
             if (!$dto->election->isOpen()) {
                 return view('vote.closed', ['election' => $dto->election]);
@@ -39,7 +39,7 @@ class VotingController extends Controller
 
             // Build ballot data
             $ballotData = $this->ballotService->buildForVoter($dto->voter, $dto->election);
-            
+
             return view('vote.ballot', [
                 'token' => $token,
                 'voter' => $dto->voter,
@@ -47,6 +47,7 @@ class VotingController extends Controller
                 'positions' => $ballotData['positions'],
                 'canRevote' => $ballotData['can_revote'],
                 'existingBallot' => $ballotData['existing_ballot'],
+                'signature' => $request->signature
             ]);
 
         } catch (\Exception $e) {
@@ -65,7 +66,7 @@ class VotingController extends Controller
         try {
             // Validate token again
             $dto = $this->tokenService->validate($token);
-            
+
             // Check if election is still open
             if (!$dto->election->isOpen()) {
                 return back()->with('error', 'Voting has closed for this election.');
@@ -73,8 +74,8 @@ class VotingController extends Controller
 
             // Submit ballot
             $ballot = $this->ballotService->submit(
-                $dto->voter, 
-                $dto->election, 
+                $dto->voter,
+                $dto->election,
                 $request->validated()['selections']
             );
 
@@ -96,7 +97,7 @@ class VotingController extends Controller
     public function receipt(string $ballotUid)
     {
         $ballot = \App\Models\Ballot::where('ballot_uid', $ballotUid)->first();
-        
+
         if (!$ballot) {
             abort(404, 'Receipt not found.');
         }
@@ -113,7 +114,7 @@ class VotingController extends Controller
     public function status(Request $request)
     {
         $user = $request->user();
-        
+
         if (!$user || $user->role !== 'voter') {
             return redirect()->route('login');
         }

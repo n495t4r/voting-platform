@@ -52,14 +52,15 @@ class VoterController extends Controller
         $result = $this->voterOnboardingService->importVoters($election, $votersData);
 
         $message = "Import completed: {$result['imported']} imported, {$result['skipped']} skipped";
-        
+        $status = "success";
         if (!empty($result['errors'])) {
             $message .= ". " . count($result['errors']) . " errors occurred.";
+            $status = "error";
         }
 
         return redirect()
             ->route('admin.voters.index', $election)
-            ->with('success', $message)
+            ->with($status, $message)
             ->with('import_errors', $result['errors']);
     }
 
@@ -70,7 +71,7 @@ class VoterController extends Controller
     {
         $this->authorize('manageVoters', $election);
 
-        $voters = $request->voter_ids 
+        $voters = $request->voter_ids
             ? $election->voters()->whereIn('id', $request->voter_ids)->get()
             : null;
 

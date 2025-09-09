@@ -15,7 +15,7 @@ class NotificationService
     public function sendVotingInvitation(Voter $voter, Election $election, string $token): void
     {
         $votingUrl = $this->generateVotingUrl($token);
-        
+
         if ($voter->email) {
             $this->sendEmailInvitation($voter, $election, $votingUrl);
         } elseif ($voter->phone) {
@@ -29,7 +29,7 @@ class NotificationService
     public function sendVotingReminder(Voter $voter, Election $election, string $token): void
     {
         $votingUrl = $this->generateVotingUrl($token);
-        
+
         if ($voter->email) {
             $this->sendEmailReminder($voter, $election, $votingUrl);
         }
@@ -60,12 +60,13 @@ class NotificationService
     {
         // TODO: Implement actual email sending
         // This would typically use Laravel's Mail facade with a Mailable class
-        
+
         // For now, just log the action
         logger()->info('Email invitation sent', [
             'voter_id' => $voter->id,
             'election_id' => $election->id,
             'email' => $voter->email,
+            'token' => $votingUrl
         ]);
     }
 
@@ -75,11 +76,13 @@ class NotificationService
     private function sendSmsInvitation(Voter $voter, Election $election, string $votingUrl): void
     {
         // TODO: Implement SMS sending (Twilio, etc.)
-        
+
         logger()->info('SMS invitation sent', [
             'voter_id' => $voter->id,
             'election_id' => $election->id,
             'phone' => $voter->phone,
+            'token' => $votingUrl
+
         ]);
     }
 
@@ -92,6 +95,8 @@ class NotificationService
             'voter_id' => $voter->id,
             'election_id' => $election->id,
             'email' => $voter->email,
+            'token' => $votingUrl
+
         ]);
     }
 

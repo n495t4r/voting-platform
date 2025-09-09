@@ -15,9 +15,9 @@ class TokenService
      * Generate a secure voting token for a voter.
      */
     public function mint(
-        Voter $voter, 
-        Election $election, 
-        int $maxUsage = 1, 
+        Voter $voter,
+        Election $election,
+        int $maxUsage = 1,
         ?Carbon $expiresAt = null
     ): string {
         // Generate a cryptographically secure random token
@@ -46,7 +46,7 @@ class TokenService
     public function validate(string $rawToken): ValidatedTokenDTO
     {
         $tokenHash = hash('sha256', $rawToken);
-        
+
         $voterToken = VoterToken::with(['voter', 'election'])
             ->where('token_hash', $tokenHash)
             ->first();
@@ -76,7 +76,7 @@ class TokenService
     public function consume(VoterToken $token): void
     {
         $token->increment('usage_count');
-        
+
         // Mark as used if this was the final usage
         if ($token->usage_count >= $token->max_usage) {
             $token->update(['used_at' => now()]);

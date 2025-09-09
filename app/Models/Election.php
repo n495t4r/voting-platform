@@ -32,6 +32,29 @@ class Election extends Model
         ];
     }
 
+    // Count draft records
+    public static function countDrafts(): int
+    {
+        return self::where('status', 'draft')->count();
+    }
+
+    // Count open elections
+    public static function countOpen(): int
+    {
+        return self::where('status', 'open')
+            ->where('starts_at', '<=', now())
+            ->where('ends_at', '>=', now())
+            ->count();
+    }
+
+    // Count closed elections
+    public static function countClosed(): int
+    {
+        return self::where('status', 'closed')
+            ->orWhere('ends_at', '<', now())
+            ->count();
+    }
+
     // Status checking methods
     public function isDraft(): bool
     {
@@ -40,7 +63,7 @@ class Election extends Model
 
     public function isOpen(): bool
     {
-        return $this->status === 'open' && 
+        return $this->status === 'open' &&
                now()->between($this->starts_at, $this->ends_at);
     }
 

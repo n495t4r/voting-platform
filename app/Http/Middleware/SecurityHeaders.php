@@ -21,13 +21,13 @@ class SecurityHeaders
         $response->headers->set('X-XSS-Protection', '1; mode=block');
         $response->headers->set('Referrer-Policy', 'strict-origin-when-cross-origin');
         $response->headers->set('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
-        
+
         // Content Security Policy for voting pages
         if ($request->is('vote/*')) {
-            $response->headers->set('Content-Security-Policy', 
+            $response->headers->set('Content-Security-Policy',
                 "default-src 'self'; " .
-                "script-src 'self' 'unsafe-inline'; " .
-                "style-src 'self' 'unsafe-inline'; " .
+                "script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; " .
+                "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; " .
                 "img-src 'self' data: https:; " .
                 "font-src 'self'; " .
                 "connect-src 'self'; " .

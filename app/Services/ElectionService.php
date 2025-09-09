@@ -68,7 +68,7 @@ class ElectionService
         }
 
         if (now()->isBefore($election->starts_at)) {
-            throw new \InvalidArgumentException('Election cannot be opened before start time.');
+            throw new \InvalidArgumentException('Election cannot be opened before start time. current time:'.now().' - Elec Time:'.$election->starts_at);
         }
 
         $election->update(['status' => 'open']);
@@ -123,7 +123,7 @@ class ElectionService
      */
     public function isInVotingWindow(Election $election): bool
     {
-        return $election->status === 'open' && 
+        return $election->status === 'open' &&
                now()->between($election->starts_at, $election->ends_at);
     }
 }

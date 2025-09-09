@@ -1,15 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.voting')
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-     Header 
+     Header
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
         <div>
             <h1 class="text-3xl font-bold text-gray-900">Voters</h1>
             <p class="text-gray-600">{{ $election->title }}</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-2 mt-4 sm:mt-0">
-            <a href="{{ route('admin.voters.import', $election) }}" 
+            <a href="{{ route('admin.voters.import', $election) }}"
                class="btn-mobile bg-blue-600 text-white hover:bg-blue-700 text-center">
                 Import Voters
             </a>
@@ -23,10 +23,10 @@
         </div>
     </div>
 
-     Filters 
+     Filters
     <div class="card-mobile mb-6">
         <form method="GET" class="flex flex-col sm:flex-row gap-4">
-            <input type="text" name="search" value="{{ request('search') }}" 
+            <input type="text" name="search" value="{{ request('search') }}"
                    placeholder="Search voters..." class="input-mobile flex-1">
             <select name="status" class="input-mobile">
                 <option value="">All Statuses</option>
@@ -40,7 +40,7 @@
         </form>
     </div>
 
-     Voters List 
+     Voters List
     <div class="card-mobile">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
@@ -87,8 +87,8 @@
                     @empty
                         <tr>
                             <td colspan="4" class="px-4 py-8 text-center text-gray-500">
-                                No voters found. 
-                                <a href="{{ route('admin.voters.import', $election) }}" 
+                                No voters found.
+                                <a href="{{ route('admin.voters.import', $election) }}"
                                    class="text-blue-600 hover:text-blue-800 font-medium">
                                     Import voters
                                 </a>

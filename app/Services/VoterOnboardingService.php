@@ -23,11 +23,11 @@ class VoterOnboardingService
         $imported = 0;
         $skipped = 0;
         $errors = [];
-
+        // dd($votersData);
         foreach ($votersData as $index => $voterData) {
             try {
                 $this->validateVoterData($voterData);
-                
+
                 // Check for duplicates
                 if ($this->isDuplicate($election, $voterData)) {
                     $skipped++;
@@ -68,17 +68,17 @@ class VoterOnboardingService
      */
     public function sendInvitations(Election $election, ?Collection $voters = null): int
     {
-        $voters = $voters ?? $election->voters()->where('status', 'invited')->get();
+        $voters = $voters ?? $election->voters()->whereIn('status', ['invited'])->get();
         $sent = 0;
 
         foreach ($voters as $voter) {
             try {
                 // Generate voting token
                 $token = $this->tokenService->mint($voter, $election);
-                
+
                 // Send invitation
                 $this->notificationService->sendVotingInvitation($voter, $election, $token);
-                
+
                 $sent++;
             } catch (\Exception $e) {
                 // Log error but continue with other voters

@@ -1,16 +1,27 @@
 <?php
 
+use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\VotingController;
 use App\Http\Controllers\Admin\ElectionController;
 use App\Http\Controllers\Admin\VoterController;
 use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\DashboardController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 // Super Admin routes
 Route::middleware(['auth', 'role:super_admin', 'audit'])->prefix('super')->name('super.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // TODO: Add super admin specific routes
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('users.index');
+    Route::get('/users', function() { return view('super.users.index', [
+            'users' => User::all(),
+        ]);
+    })->name('users.index');
+    Route::get('/features', function() { return view("Hello");
+    })->name('features.index');
+    Route::get('/settings', function() { return view("Hello");
+    })->name('settings.index');
 });
 
 // Admin/Committee routes
@@ -35,6 +46,9 @@ Route::middleware(['auth', 'role:admin,committee', 'audit'])->prefix('admin')->n
     Route::post('elections/{election}/positions', [PositionController::class, 'store'])->name('positions.store');
     Route::put('elections/{election}/positions/{position}', [PositionController::class, 'update'])->name('positions.update');
     Route::delete('elections/{election}/positions/{position}', [PositionController::class, 'destroy'])->name('positions.destroy');
+
+    // Candidates
+    Route::resource('elections.positions.candidates', CandidateController::class);
 });
 
 // Voter routes

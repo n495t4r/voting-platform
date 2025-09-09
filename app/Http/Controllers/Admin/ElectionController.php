@@ -129,6 +129,8 @@ class ElectionController extends Controller
 
         $results = $this->resultsService->calculateResults($election);
 
+        // dd($results);
+
         return view('admin.elections.results', compact('election', 'results'));
     }
 
