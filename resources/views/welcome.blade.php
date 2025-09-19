@@ -15,7 +15,7 @@
                 Get Started
             </a>
         @else
-            <a href="{{ route('dashboard') }}" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg hover:bg-blue-700 transition">
+            <a href="{{ route('admin.dashboard') }}" class="bg-blue-600 text-white px-6 py-3 rounded-md text-lg hover:bg-blue-700 transition">
                 Go to Dashboard
             </a>
         @endguest
