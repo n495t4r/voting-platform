@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CandidateController;
 use App\Http\Controllers\VotingController;
 use App\Http\Controllers\Admin\ElectionController;
+use App\Http\Controllers\Admin\OrganizationController;
 use App\Http\Controllers\Admin\VoterController;
 use App\Http\Controllers\Admin\PositionController;
 use App\Http\Controllers\DashboardController;
@@ -22,6 +23,9 @@ Route::middleware(['auth', 'role:super_admin', 'audit'])->prefix('super')->name(
     })->name('features.index');
     Route::get('/settings', function() { return view("Hello");
     })->name('settings.index');
+
+    //Organizations
+    // Route::resource('organizations', OrganizationController::class);
 });
 
 // Admin/Committee routes
@@ -49,6 +53,9 @@ Route::middleware(['auth', 'role:admin,committee', 'audit'])->prefix('admin')->n
 
     // Candidates
     Route::resource('elections.positions.candidates', CandidateController::class);
+
+    //Organizations
+    Route::resource('organizations', OrganizationController::class);
 });
 
 // Voter routes

@@ -2,6 +2,8 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Include the dynamic breadcrumb component --}}
+        @include('admin.components._breadcrumb')
         {{-- Header --}}
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
             <div>
@@ -9,7 +11,8 @@
                 <p class="text-gray-600">Manage your elections and voting processes</p>
             </div>
             <div class="mt-4 sm:mt-0">
-                <a href="{{ route('admin.elections.create') }}" class="btn-mobile bg-blue-600 text-white hover:bg-blue-700">
+                <a href="{{ route('admin.elections.create') }}"
+                   class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium shadow hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
                     Create Election
                 </a>
             </div>
@@ -18,16 +21,13 @@
         <!-- Filters -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
             <form method="GET" class="flex flex-col sm:flex-row gap-4">
-                <select name="status" class="input-mobile">
-                    <option value="">All Statuses</option>
-                    <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
-                    <option value="scheduled" {{ request('status') === 'scheduled' ? 'selected' : '' }}>Scheduled</option>
-                    <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
-                    <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
-                </select>
-                <button type="submit" class="btn-mobile bg-gray-50 text-gray-700 hover:bg-gray-100">
-                    Filter
-                </button>
+            <select name="status" class="input-mobile" onchange="this.form.submit()">
+                <option value="">All Statuses</option>
+                <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+                <option value="scheduled" {{ request('status') === 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+                <option value="open" {{ request('status') === 'open' ? 'selected' : '' }}>Open</option>
+                <option value="closed" {{ request('status') === 'closed' ? 'selected' : '' }}>Closed</option>
+            </select>
             </form>
         </div>
 

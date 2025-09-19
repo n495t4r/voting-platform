@@ -2,6 +2,9 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {{-- Include the dynamic breadcrumb component --}}
+        @include('admin.components._breadcrumb', ['election' => $election])
+
         <div class="mb-6 sticky top-0 z-20 bg-white pt-6">
             <h1 class="text-3xl font-extrabold text-gray-900">Election Results</h1>
             <p class="text-gray-600">Final results for: <span class="font-medium">{{ $election->title }}</span></p>

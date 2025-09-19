@@ -1,6 +1,9 @@
 @extends('layouts.voting')
 
-@section('content')<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+@section('content')
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    {{-- Include the dynamic breadcrumb component --}}
+        @include('admin.components._breadcrumb', ['election' => $election, 'position' => $position])
     <div class="mb-6"><h1 class="text-3xl font-bold text-gray-900">Manage Candidates</h1>
         <p class="text-gray-600">For Election: <span class="font-medium">{{ $election->title }}</span></p>
         <p class="text-gray-600">Position: <span class="font-medium">{{ $position->title }}</span></p>

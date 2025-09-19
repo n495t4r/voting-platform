@@ -35,10 +35,7 @@
                         class="block w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition">
                         Manage Users
                     </a>
-                    <a href="{{ route('admin.elections.index') }}"
-                        class="block w-full text-left px-4 py-2 bg-yellow-50 text-yellow-700 rounded-md hover:bg-yellow-100 transition">
-                        Manage Elections
-                    </a>
+
                     <a href="{{ route('super.features.index') }}"
                         class="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition">
                         Feature Flags
@@ -47,15 +44,23 @@
                         class="block w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition">
                         System Settings
                     </a>
+                    <a href="{{ route('admin.elections.index') }}"
+                        class="block w-full text-left px-4 py-2 bg-yellow-50 text-yellow-700 rounded-md hover:bg-yellow-100 transition">
+                        Manage Elections
+                    </a>
+                    <a href="{{ route('admin.organizations.index') }}"
+                        class="block w-full text-left px-4 py-2 bg-pink-50 text-pink-700 rounded-md hover:bg-pink-100 transition">
+                        Manage Organizations
+                    </a>
                 </div>
             </div>
 
             <!-- Recent Activity -->
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                @if(count($recentActivity) > 0)
+                @if (count($recentActivity) > 0)
                     <div class="max-h-80 overflow-y-auto">
-                        @foreach($recentActivity as $activity)
+                        @foreach ($recentActivity as $activity)
                             <div class="flex items-center justify-between py-2 border-b last:border-b-0">
                                 <div>
                                     <p class="text-gray-900 font-medium">{{ $activity->actor->name }}</p>
@@ -67,6 +72,34 @@
                     </div>
                 @else
                     <p class="text-gray-500 text-center">No recent activity.</p>
+                @endif
+            </div>
+
+            <!-- Recent Elections -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Elections</h3>
+                @if (count($recentElections) > 0)
+                    @foreach ($recentElections as $election)
+                        <div class="flex items-center justify-between py-2 border-b last:border-b-0">
+                            <div>
+                                <a href="{{ route('admin.elections.show', $election) }}"
+                                    class="text-gray-900 hover:text-blue-600 font-medium">
+                                    {{ $election->title }}
+                                </a>
+                                <p class="text-gray-500 text-sm">{{ $election->organization->name }}</p>
+                            </div>
+                            <span
+                                class="px-2 py-1 text-xs font-medium rounded-full
+                                    @if ($election->status === 'draft') bg-gray-100 text-gray-800
+                                    @elseif($election->status === 'scheduled') bg-blue-100 text-blue-800
+                                    @elseif($election->status === 'open') bg-green-100 text-green-800
+                                    @elseif($election->status === 'closed') bg-red-100 text-red-800 @endif">
+                                {{ ucfirst($election->status) }}
+                            </span>
+                        </div>
+                    @endforeach
+                @else
+                    <p class="text-gray-500 text-center">No recent elections.</p>
                 @endif
             </div>
         </div>

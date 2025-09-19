@@ -13,9 +13,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            OrganizationSeeder::class,
-            FeatureFlagSeeder::class,
-            SettingsSeeder::class,
+            // OrganizationSeeder::class,
+            // FeatureFlagSeeder::class,
+            // SettingsSeeder::class,
         ]);
 
         // Create default super admin if none exists

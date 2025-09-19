@@ -62,4 +62,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(AuditLog::class, 'actor_id');
     }
+
+    public function organizations(): HasMany
+    {
+        return $this->hasMany(Organization::class);
+    }
 }

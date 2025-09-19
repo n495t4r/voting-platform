@@ -37,10 +37,14 @@ class DashboardController extends Controller
         ];
 
         $recentActivity = \App\Models\AuditLog::orderBy('created_at', 'desc')
-            ->take(10)
+            ->take(15)
             ->get();
 
-        return view('dashboard.super-admin', compact('user', 'metrics', 'recentActivity'));
+        $recentElections = \App\Models\Election::orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('dashboard.super-admin', compact('user', 'metrics', 'recentActivity', 'recentElections'));
     }
 
     /**
