@@ -53,6 +53,7 @@
                 </div>
                 <select name="status" class="input-mobile">
                     <option value="">All Statuses</option>
+                    <option value="invited" {{ request('status') === 'registered' ? 'selected' : '' }}>Registered</option>
                     <option value="invited" {{ request('status') === 'invited' ? 'selected' : '' }}>Invited</option>
                     <option value="verified" {{ request('status') === 'verified' ? 'selected' : '' }}>Verified</option>
                     <option value="voted" {{ request('status') === 'voted' ? 'selected' : '' }}>Voted</option>
@@ -145,11 +146,11 @@
                 @endif
             </div>
 
-            @if ($voters->hasPages())
+            {{-- @if ($voters->hasPages()) --}}
                 <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
                     {{ $voters->links() }}
                 </div>
-            @endif
+            {{-- @endif --}}
         </div>
     </div>
 

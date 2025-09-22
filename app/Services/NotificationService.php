@@ -21,6 +21,17 @@ class NotificationService
         } elseif ($voter->phone) {
             $this->sendSmsInvitation($voter, $election, $votingUrl);
         }
+
+        // // Securely store the $votingUrl for retrieval or resending reminders
+        // Voter::updateOrCreate(
+        //     [
+        //         'voter_id' => $voter->id,
+        //         'election_id' => $election->id,
+        //     ],
+        //     [
+        //         'voting_url' => encrypt($votingUrl),
+        //     ]
+        // );
     }
 
     /**

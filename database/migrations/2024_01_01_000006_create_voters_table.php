@@ -15,11 +15,11 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->string('external_id')->nullable(); // For importing from external systems
-            $table->enum('status', ['invited', 'verified', 'voted', 'revoked'])->default('invited');
+            $table->enum('status', ['registered', 'invited', 'verified', 'voted', 'revoked'])->default('registered');
             $table->timestamp('verified_at')->nullable();
             $table->timestamp('voted_at')->nullable();
             $table->timestamps();
-            
+
             $table->index(['election_id', 'status']);
             $table->index(['email']);
             $table->index(['phone']);

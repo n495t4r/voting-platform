@@ -40,7 +40,7 @@ class VoterOnboardingService
                     'email' => $voterData['email'] ?? null,
                     'phone' => $voterData['phone'] ?? null,
                     'external_id' => $voterData['external_id'] ?? null,
-                    'status' => 'invited',
+                    'status' => 'registered',
                 ]);
 
                 $imported++;
@@ -66,9 +66,15 @@ class VoterOnboardingService
     /**
      * Send voting invitations to voters.
      */
-    public function sendInvitations(Election $election, ?Collection $voters = null): int
+    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate=false): int
     {
-        $voters = $voters ?? $election->voters()->whereIn('status', ['invited'])->get();
+
+        if(!$regenerate){
+            $voters = $voters ?? $election->voters()->whereIn('status', ['registered'])->get();
+        }else{
+            $voters = $voters ?? $election->voters()->get();
+        }
+
         $sent = 0;
 
         foreach ($voters as $voter) {
@@ -80,6 +86,10 @@ class VoterOnboardingService
                 $this->notificationService->sendVotingInvitation($voter, $election, $token);
 
                 $sent++;
+
+                $voter->update([
+                    'status' => 'invited'
+                ]);
             } catch (\Exception $e) {
                 // Log error but continue with other voters
                 $this->auditService->log('invitation_failed', [
@@ -89,6 +99,8 @@ class VoterOnboardingService
                 ]);
             }
         }
+
+
 
         $this->auditService->log('invitations_sent', [
             'election_id' => $election->id,

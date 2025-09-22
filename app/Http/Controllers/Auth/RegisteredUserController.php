@@ -45,6 +45,18 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        redirect()->route('voter.dashboard');
+        // return redirect(route('dashboard', absolute: false));
+    }
+
+    private function redirectBasedOnRole($user): RedirectResponse
+    {
+        dd($user->role);
+        return match ($user->role) {
+            'super_admin' => redirect()->route('super.dashboard'),
+            'admin', 'committee' => redirect()->route('admin.dashboard'),
+            'voter' => redirect()->route('voter.dashboard'),
+            // default => redirect()->route('dashboard'),
+        };
     }
 }

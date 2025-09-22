@@ -41,7 +41,10 @@ class PositionController extends Controller
     {
         $this->authorize('update', $election);
 
-        if ($election->status != 'draft' || $election->status != 'scheduled') {
+
+
+        if ($election->status != 'draft' && $election->status != 'scheduled') {
+
             return back()->with('error', 'Open or Closed election positions cannot be edited.');
         }
 
@@ -56,6 +59,11 @@ class PositionController extends Controller
     public function destroy(Election $election, Position $position)
     {
         $this->authorize('update', $election);
+
+         if ($election->status != 'draft' && $election->status != 'scheduled') {
+
+            return back()->with('error', 'Open or Closed election positions cannot be deleted.');
+        }
 
         $position->delete();
 

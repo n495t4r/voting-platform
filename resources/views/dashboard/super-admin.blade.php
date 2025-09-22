@@ -61,6 +61,7 @@
                 @if (count($recentActivity) > 0)
                     <div class="max-h-80 overflow-y-auto">
                         @foreach ($recentActivity as $activity)
+                        {{-- @dd($activity) --}}
                             <div class="flex items-center justify-between py-2 border-b last:border-b-0">
                                 <div>
                                     <p class="text-gray-900 font-medium">{{ $activity->actor->name }}</p>
