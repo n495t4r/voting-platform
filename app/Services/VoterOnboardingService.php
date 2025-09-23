@@ -12,7 +12,8 @@ class VoterOnboardingService
     public function __construct(
         private TokenService $tokenService,
         private NotificationService $notificationService,
-        private AuditService $auditService
+        private AuditService $auditService,
+        private WhatsAppService $whatsAppService
     ) {}
 
     /**
@@ -66,7 +67,7 @@ class VoterOnboardingService
     /**
      * Send voting invitations to voters.
      */
-    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate=false): int
+    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate=true): int
     {
 
         if(!$regenerate){
@@ -90,6 +91,10 @@ class VoterOnboardingService
                 $voter->update([
                     'status' => 'invited'
                 ]);
+
+                // send WhatsApp invitation
+                // $this->whatsAppService->sendWhatsAppInvitation($voter, $election, $token);
+                // $this->whatsAppService->sendWhatsAppInvitation();
             } catch (\Exception $e) {
                 // Log error but continue with other voters
                 $this->auditService->log('invitation_failed', [

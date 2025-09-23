@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\URL;
 
 class NotificationService
 {
+
+    public function __construct(
+        private EmailService $emailService
+    ) {}
     /**
      * Send voting invitation to a voter.
      */
@@ -79,6 +83,13 @@ class NotificationService
             'email' => $voter->email,
             'token' => $votingUrl
         ]);
+
+
+        if ($this->emailService->sendInvitation($voter->email, $voter->full_name, $election, $votingUrl)) {
+            // return response()->json(['message' => 'Email invitation sent!']);
+        } else {
+            // return response()->json(['error' => 'Failed to send invitation.'], 500);
+        }
     }
 
     /**
