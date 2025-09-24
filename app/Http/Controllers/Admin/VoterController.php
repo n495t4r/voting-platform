@@ -81,13 +81,18 @@ class VoterController extends Controller
 
         // dd($single, " ID: ". $request->voter_id);
         if ($singleVoter) {
+
+            // dd($request->voter_id);
             $voter = $request->voter_id
-                ? $election->voters()->where('id', $request->voter_id)
-                ->whereNot('status','voted')->first()
+                ? $election->voters()->where('id', $request->voter_id)->first()
                 : null;
             $sent = $this->voterOnboardingService->sendToVoter($election, $voter);
         }else{
             $sent = $this->voterOnboardingService->sendInvitations($election, $voters);
+        }
+
+        if(!$sent){
+            return back()->with('error', "Invitations not sent to voter(s).");
         }
 
         return back()->with('success', "Invitations sent to {$sent} voter(s).");
@@ -97,8 +102,12 @@ class VoterController extends Controller
     public function revokeInvitations(Election $election, Voter $voter)
     {
         $this->authorize('manageVoters', $election);
-        $this->voterOnboardingService->revokeTokens( $voter, $election);
 
+        if($voter->status === "voted"){
+            return back()->with('error', "{$voter->full_name}, voted already!");
+        }
+
+        $this->voterOnboardingService->revokeTokens( $voter, $election);
         return back()->with('success', "Invitations revoked for {$voter->full_name}.");
     }
 

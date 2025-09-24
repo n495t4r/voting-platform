@@ -14,7 +14,8 @@ class VoterOnboardingService
         private NotificationService $notificationService,
         private AuditService $auditService,
         private WhatsAppService $whatsAppService
-    ) {}
+    ) {
+    }
 
     /**
      * Import voters from CSV data.
@@ -67,15 +68,15 @@ class VoterOnboardingService
     /**
      * Send voting invitations to voters.
      */
-    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate=false): int
+    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate = false): int
     {
 
-        if(!$regenerate){
+        if (!$regenerate) {
             $voters = $voters ?? $election->voters()
-            ->whereIn('status', ['registered'])
-            ->whereNotIn('status', ['voted','revoked','invited'])
-            ->get();
-        }else{
+                ->whereIn('status', ['registered'])
+                ->whereNotIn('status', ['voted', 'revoked', 'invited'])
+                ->get();
+        } else {
             $voters = $voters ?? $election->voters()->get();
         }
 
@@ -119,10 +120,10 @@ class VoterOnboardingService
     }
 
     //resend to individual voter
-     public function sendToVoter(Election $election, Voter $voter, $regenerate=true): int
+    public function sendToVoter(Election $election, Voter $voter, $regenerate = true): int
     {
-
         $sent = 0;
+        if ($voter->status != "voted") {
             try {
                 // Generate voting token
                 $token = $this->tokenService->mint($voter, $election);
@@ -145,10 +146,13 @@ class VoterOnboardingService
                 ]);
             }
 
-        $this->auditService->log('invitation_sent', [
-            'election_id' => $election->id,
-            'sent_count' => $sent,
-        ]);
+            $this->auditService->log('invitation_sent', [
+                'election_id' => $election->id,
+                'sent_count' => $sent,
+            ]);
+        }else{
+            return false;
+        }
 
         return $sent;
     }
@@ -208,7 +212,8 @@ class VoterOnboardingService
     }
 
     // revoke votertokens
-    public function revokeTokens(Voter $voter, Election $election) {
+    public function revokeTokens(Voter $voter, Election $election)
+    {
         $this->tokenService->revokeVoterTokens($voter, $election);
         $voter->update([
             'status' => 'revoked'
