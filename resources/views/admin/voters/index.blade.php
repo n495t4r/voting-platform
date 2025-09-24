@@ -23,7 +23,7 @@
                 </a>
                 <button type="button"
                     class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-lg text-white bg-green-600 hover:bg-green-700 hover:shadow-xl transition-all duration-300"
-                    onclick="showSendInvitationsModal()">
+                    onclick="showSendInvitationsModal(false, false)">
                     <svg class="-ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                         fill="currentColor">
                         <path
@@ -113,6 +113,10 @@
                                         class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         Voted At
                                     </th>
+                                    <th
+                                        class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                        Actions
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -138,6 +142,38 @@
                                         <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
                                             {{ $voter->voted_at?->format('M j, Y g:i A') ?: '-' }}
                                         </td>
+                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <!-- Send Invitation Button -->
+                                            <button type="button" class="text-yellow-600 hover:text-yellow-800 transition"
+                                                onclick="showSendInvitationsModal('{{ $voter->id }}', false)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M16 12v4m0 0v4m0-4h4m-4 0h-4m4-4V8m0 4H8m8 0h4m-4 0H4" />
+                                                </svg>
+                                            </button>
+                                            <form id="send-single-invitation-form-{{ $voter->id }}" method="POST"
+                                                action="{{ route('admin.voters.send-invitations', $election) }}"
+                                                class="hidden">
+                                                <input type="hidden" name="voter_id" value="{{ $voter->id }}">
+                                                @csrf
+                                            </form>
+
+                                            <!-- Revoke Invitation Button -->
+                                            <button type="button" class="text-red-600 hover:text-red-800 transition ml-2"
+                                                onclick="showSendInvitationsModal('{{ $voter->id }}', true)">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                        d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            </button>
+                                            <form id="revoke-invitations-form-{{ $voter->id }}" method="POST"
+                                                action="{{ route('admin.voters.revoke-invitations', [$election, $voter->id]) }}"
+                                                class="hidden">
+                                                @csrf
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -147,9 +183,9 @@
             </div>
 
             {{-- @if ($voters->hasPages()) --}}
-                <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
-                    {{ $voters->links() }}
-                </div>
+            <div class="px-4 py-3 border-t border-gray-200 bg-gray-50">
+                {{ $voters->links() }}
+            </div>
             {{-- @endif --}}
         </div>
     </div>
@@ -160,7 +196,7 @@
         <div
             class="bg-white rounded-xl shadow-2xl p-8 m-4 max-w-sm w-full transform transition-all duration-300 scale-95 opacity-0">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-900">Confirm Invitation Send</h3>
+                <h3 id="modal_header" class="text-2xl font-bold text-gray-900">Confirm Invitation Send</h3>
                 <button type="button" class="text-gray-400 hover:text-gray-600 transition"
                     onclick="hideSendInvitationsModal()">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -171,8 +207,8 @@
                 </button>
             </div>
             <div class="text-gray-700 text-center">
-                <p class="font-semibold mb-4">Are you sure you want to send invitations to all eligible voters?</p>
-                <p>This action will send an invitation to every voter who has not yet voted.</p>
+                <p id="modal_body" class="font-semibold mb-4">Are you sure you want to send invitation to eligible
+                    voter(s)?</p>
             </div>
             <div class="mt-6 flex justify-center space-x-4">
                 <button type="button"
@@ -194,18 +230,34 @@
     </form>
 
     <script>
-        function showSendInvitationsModal() {
+        function showSendInvitationsModal(voter = true, revoke = false) {
             const modal = document.getElementById('sendInvitationsModal');
             const modalContent = modal.querySelector('div');
 
+            if (revoke) {
+                console.log("Revoke");
+                // document.getElementById("modal_header").innerHTML = "Revoke Invite";
+            }
+
             document.getElementById('confirmSendBtn').onclick = () => {
-                document.getElementById('send-invitations-form').submit();
+                if (voter) {
+                    document.getElementById('send-single-invitation-form-' + voter).submit();
+                    if (revoke) {
+                        document.getElementById('revoke-invitations-form-' + voter).submit();
+                    }
+                } else {
+                    document.getElementById('send-invitations-form').submit();
+                }
             };
 
             modal.classList.remove('hidden');
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
+                if (revoke) {
+                    console.log("Revoke");
+                    document.getElementById("modal_header").innerHTML = "Revoke Invite";
+                }
             }, 10);
         }
 

@@ -115,6 +115,41 @@ class VoterOnboardingService
         return $sent;
     }
 
+    //resend to individual voter
+     public function sendToVoter(Election $election, Voter $voter, $regenerate=true): int
+    {
+
+        $sent = 0;
+            try {
+                // Generate voting token
+                $token = $this->tokenService->mint($voter, $election);
+
+                // Send invitation
+                $this->notificationService->sendVotingInvitation($voter, $election, $token);
+
+                $sent++;
+
+                $voter->update([
+                    'status' => 'invited'
+                ]);
+
+            } catch (\Exception $e) {
+                // Log error but continue with other voters
+                $this->auditService->log('invitation_failed', [
+                    'election_id' => $election->id,
+                    'voter_id' => $voter->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+
+        $this->auditService->log('invitation_sent', [
+            'election_id' => $election->id,
+            'sent_count' => $sent,
+        ]);
+
+        return $sent;
+    }
+
     /**
      * Validate voter data structure.
      */
@@ -164,6 +199,18 @@ class VoterOnboardingService
         ]);
 
         $this->auditService->log('voter_verified', [
+            'election_id' => $voter->election_id,
+            'voter_id' => $voter->id,
+        ]);
+    }
+
+    // revoke votertokens
+    public function revokeTokens(Voter $voter, Election $election) {
+        $this->tokenService->revokeVoterTokens($voter, $election);
+        $voter->update([
+            'status' => 'revoked'
+        ]);
+        $this->auditService->log('token_revoked', [
             'election_id' => $voter->election_id,
             'voter_id' => $voter->id,
         ]);

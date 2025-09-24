@@ -44,6 +44,7 @@ Route::middleware(['auth', 'role:admin,committee', 'audit'])->prefix('admin')->n
     Route::get('elections/{election}/voters/import', [VoterController::class, 'import'])->name('voters.import');
     Route::post('elections/{election}/voters/import', [VoterController::class, 'processImport'])->name('voters.process-import');
     Route::post('elections/{election}/voters/send-invitations', [VoterController::class, 'sendInvitations'])->name('voters.send-invitations');
+    Route::post('elections/{election}/voters/{voter}/revoke-invitations', [VoterController::class, 'revokeInvitations'])->name('voters.revoke-invitations');
 
     // Positions
     Route::get('elections/{election}/positions', [PositionController::class, 'index'])->name('positions.index');

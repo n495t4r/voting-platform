@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ImportVotersRequest;
 use App\Models\Election;
+use App\Models\Voter;
 use App\Services\VoterOnboardingService;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,8 @@ class VoterController extends Controller
 {
     public function __construct(
         private VoterOnboardingService $voterOnboardingService
-    ) {}
+    ) {
+    }
 
     /**
      * Display voters for an election.
@@ -71,13 +73,32 @@ class VoterController extends Controller
     {
         $this->authorize('manageVoters', $election);
 
+        $singleVoter = $request->voter_id ? true : false;
+
         $voters = $request->voter_ids
-            ? $election->voters()->whereIn('id', $request->voter_ids)->get()
-            : null;
+                ? $election->voters()->whereIn('id', $request->voter_ids)->get()
+                : null;
 
-        $sent = $this->voterOnboardingService->sendInvitations($election, $voters);
+        // dd($single, " ID: ". $request->voter_id);
+        if ($singleVoter) {
+            $voter = $request->voter_id
+                ? $election->voters()->where('id', $request->voter_id)->first()
+                : null;
+            $sent = $this->voterOnboardingService->sendToVoter($election, $voter);
+        }else{
+            $sent = $this->voterOnboardingService->sendInvitations($election, $voters);
+        }
 
-        return back()->with('success', "Invitations sent to {$sent} voters.");
+        return back()->with('success', "Invitations sent to {$sent} voter(s).");
+    }
+
+
+    public function revokeInvitations(Election $election, Voter $voter)
+    {
+        $this->authorize('manageVoters', $election);
+        $this->voterOnboardingService->revokeTokens( $voter, $election);
+
+        return back()->with('success', "Invitations revoked for {$voter->full_name}.");
     }
 
     /**
@@ -117,4 +138,7 @@ class VoterController extends Controller
 
         return $data;
     }
+
+
+
 }
