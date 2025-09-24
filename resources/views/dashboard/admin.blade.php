@@ -27,25 +27,6 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="bg-white rounded-lg shadow p-6">
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-                <div class="space-y-3">
-                    <a href="{{ route('admin.elections.create') }}"
-                        class="block w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition">
-                        Create Election
-                    </a>
-                    <a href="{{ route('admin.voters.import', ['election' => '__election_id__']) }}"
-                        class="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition">
-                        Import Voters
-                    </a>
-                    <a href="#"
-                        class="block w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition">
-                        View Reports
-                    </a>
-                </div>
-            </div>
-
             <!-- Recent Elections -->
             <div class="bg-white rounded-lg shadow p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Elections</h3>
@@ -71,6 +52,26 @@
                     <p class="text-gray-500 text-center">No recent elections.</p>
                 @endforelse
             </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white rounded-lg shadow p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                <div class="space-y-3">
+                    <a href="{{ route('admin.elections.create') }}"
+                        class="block w-full text-left px-4 py-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition">
+                        Create Election
+                    </a>
+                    {{-- <a href="{{ route('admin.voters.import', ['election' => '__election_id__']) }}"
+                        class="block w-full text-left px-4 py-2 bg-green-50 text-green-700 rounded-md hover:bg-green-100 transition">
+                        Import Voters
+                    </a>
+                    <a href="#"
+                        class="block w-full text-left px-4 py-2 bg-purple-50 text-purple-700 rounded-md hover:bg-purple-100 transition">
+                        View Reports
+                    </a> --}}
+                </div>
+            </div>
+
         </div>
     </div>
 @endsection
