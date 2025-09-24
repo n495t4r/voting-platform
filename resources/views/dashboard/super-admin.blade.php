@@ -64,7 +64,7 @@
                         {{-- @dd($activity) --}}
                             <div class="flex items-center justify-between py-2 border-b last:border-b-0">
                                 <div>
-                                    <p class="text-gray-900 font-medium">{{ $activity->actor->name }}</p>
+                                    <p class="text-gray-900 font-medium">{{ $activity?->actor?->name }}</p>
                                     <p class="text-gray-900 font-medium">{{ $activity->event }}</p>
                                     <p class="text-gray-500 text-sm">{{ $activity->created_at->diffForHumans() }}</p>
                                 </div>
