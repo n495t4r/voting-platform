@@ -38,7 +38,13 @@ class CandidateController extends Controller
     public function store(Request $request, Election $election, Position $position)
     {
         $this->authorize('update', $election);
-        // dd($position);
+
+
+        if ($election->status != 'draft' && $election->status != 'scheduled') {
+
+            return back()->with('error', 'New Candidates cannot be added to an Open or Closed Election.');
+        }
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'manifesto' => 'nullable|string',
@@ -66,11 +72,11 @@ class CandidateController extends Controller
      * @param Candidate $candidate
      * @return \Illuminate\View\View
      */
-    public function edit(Election $election, Position $position, Candidate $candidate)
-    {
-        $this->authorize('update', $election);
-        return view('admin.candidates.edit', compact('election', 'position', 'candidate'));
-    }
+    // public function edit(Election $election, Position $position, Candidate $candidate)
+    // {
+    //     $this->authorize('update', $election);
+    //     return view('admin.candidates.edit', compact('election', 'position', 'candidate'));
+    // }
 
     /**
      * Update the specified candidate in storage.
@@ -84,6 +90,11 @@ class CandidateController extends Controller
     public function update(Request $request, Election $election, Position $position, Candidate $candidate)
     {
         $this->authorize('update', $election);
+
+        if ($election->status != 'draft' && $election->status != 'scheduled') {
+
+            return back()->with('error', 'Candidates cannot be edited for an Open or Closed Election.');
+        }
 
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -105,7 +116,7 @@ class CandidateController extends Controller
             'photo_path' => $validatedData['photo_path'] ?? $candidate->photo_path,
         ]);
 
-        return redirect()->route('admin.candidates.index', [$election, $position])->with('success', 'Candidate updated successfully.');
+        return back()->with('success', 'Candidate updated successfully.');
     }
 
     /**
@@ -119,6 +130,11 @@ class CandidateController extends Controller
     public function destroy(Election $election, Position $position, Candidate $candidate)
     {
         $this->authorize('update', $election);
+
+        if ($election->status != 'draft' && $election->status != 'scheduled') {
+
+            return back()->with('error', 'Candidates cannot be deleted for an Open or Closed election.');
+        }
 
         if ($candidate->photo_path) {
             Storage::disk('public')->delete($candidate->photo_path);

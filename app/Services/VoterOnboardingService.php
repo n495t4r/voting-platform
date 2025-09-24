@@ -67,11 +67,14 @@ class VoterOnboardingService
     /**
      * Send voting invitations to voters.
      */
-    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate=true): int
+    public function sendInvitations(Election $election, ?Collection $voters = null, $regenerate=false): int
     {
 
         if(!$regenerate){
-            $voters = $voters ?? $election->voters()->whereIn('status', ['registered'])->get();
+            $voters = $voters ?? $election->voters()
+            ->whereIn('status', ['registered'])
+            ->whereNotIn('status', ['voted','revoked','invited'])
+            ->get();
         }else{
             $voters = $voters ?? $election->voters()->get();
         }

@@ -82,7 +82,8 @@ class VoterController extends Controller
         // dd($single, " ID: ". $request->voter_id);
         if ($singleVoter) {
             $voter = $request->voter_id
-                ? $election->voters()->where('id', $request->voter_id)->first()
+                ? $election->voters()->where('id', $request->voter_id)
+                ->whereNot('status','voted')->first()
                 : null;
             $sent = $this->voterOnboardingService->sendToVoter($election, $voter);
         }else{

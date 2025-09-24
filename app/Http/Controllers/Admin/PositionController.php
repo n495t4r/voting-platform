@@ -29,6 +29,11 @@ class PositionController extends Controller
     {
         $this->authorize('update', $election);
 
+        if ($election->status != 'draft' && $election->status != 'scheduled') {
+
+            return back()->with('error', 'New Positions cannot be added to an Open or Closed Election.');
+        }
+
         $position = $election->positions()->create($request->validated());
 
         return back()->with('success', 'Position created successfully.');
@@ -45,7 +50,7 @@ class PositionController extends Controller
 
         if ($election->status != 'draft' && $election->status != 'scheduled') {
 
-            return back()->with('error', 'Open or Closed election positions cannot be edited.');
+            return back()->with('error', 'Positions cannot be edited for an Open or Closed Election.');
         }
 
         $position->update($request->validated());
@@ -62,7 +67,7 @@ class PositionController extends Controller
 
          if ($election->status != 'draft' && $election->status != 'scheduled') {
 
-            return back()->with('error', 'Open or Closed election positions cannot be deleted.');
+            return back()->with('error', 'Positions cannot be deleted for an Open or Closed Election.');
         }
 
         $position->delete();
