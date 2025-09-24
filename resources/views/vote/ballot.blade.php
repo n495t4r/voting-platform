@@ -133,9 +133,9 @@
 </div>
 
 <!-- Footer -->
-<footer class="bg-gray-800 text-white py-6">
+<footer class="bg-gray-800 text-white py-6 mt-auto" >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-sm text-gray-400">
-        <p>&copy; {{ date('Y') }} SecureVote. All rights reserved.</p>
+        <p>&copy; {{ date('Y') }} {{ config('app.name', 'PEVA Vote') }}. All rights reserved.</p>
         <p class="mt-2">
             <a href="#" class="hover:text-white transition-colors">Privacy Policy</a>
             <span class="mx-2">|</span>

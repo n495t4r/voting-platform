@@ -29,7 +29,7 @@ class VotingController extends Controller
 
             // Check if election is open
             if (!$dto->election->isOpen()) {
-                return view('vote.closed', ['election' => $dto->election]);
+                return view('vote.closed', ['election' => $dto->election, 'voter'=> $dto->voter]);
             }
 
             // Mark voter as verified if not already

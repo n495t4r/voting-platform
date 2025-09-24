@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Vote</title>
+    <link rel="icon" type="image/svg+xml" href="{{ asset('favicon.svg') }}">
+
+    <title>{{ config('app.name', 'PEVA') }}</title>
     <!-- Content Security Policy: Allow Tailwind CDN -->
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com;">
     <!-- Tailwind CSS CDN for instant styling -->

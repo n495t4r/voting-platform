@@ -69,9 +69,9 @@
         </div>
 
         <!-- Actions -->
-        <div class="mt-6 space-y-3 no-print">
+        <div class="mt-3 space-y-3 no-print">
             <button onclick="window.print()"
-                class="w-full py-3 px-6 rounded-full font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-lg transform hover:scale-105 active:scale-95">
+                class="inline-flex items-center px-3 py-1 rounded-full text-xs text-gray-500 bg-gray-100">
                 Print Receipt
             </button>
 
